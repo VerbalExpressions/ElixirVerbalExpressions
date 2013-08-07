@@ -12,11 +12,36 @@ once ready.
 
 ## Examples
 
-Still missing.
+Here's a couple of simple examples to give an idea of how VerbalExpressions works:
+
+### Testing if we have a valid URL
+
+```elixir
+# Create an example of how to test for correctly formed URLs
+alias VerbalExpressions, as: VE
+tester = VE.startOfLine()
+         |> VE.then("http")
+         |> VE.maybe("s")
+         |> VE.then("://")
+         |> VE.maybe("www")
+         |> VE.anythingBut(" ")
+         |> VE.endOfLine()
+         
+testMe = "https://www.google.com"
+
+result = tester |> VE.match?(testMe)
+
+if result do
+  IO.puts "Valid URL :)"
+else
+  IO.puts "Invalid URL :("
+end
+
+```
 
 ## API documentation
 
-None, yet.
+You can find the API documentation on it's (own page)[http://maxsz.github.io/ElixirVerbalExpressions/docs/index.html].
 
 ## Contributions
 Pull requests are welcome.
