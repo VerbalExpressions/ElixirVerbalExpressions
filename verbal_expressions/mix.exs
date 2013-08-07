@@ -7,7 +7,8 @@ defmodule VerbalExpressions.Mixfile do
       name: "ElixirVerbalExpressions",
       source_url: "https://github.com/maxsz/ElixirVerbalExpressions",
       elixir: "~> 0.10.1",
-      deps: deps ]
+      deps: deps,
+      env: [test: [deps: deps_test]]]
   end
 
   # Configuration for the OTP application
@@ -19,5 +20,9 @@ defmodule VerbalExpressions.Mixfile do
   # { :foobar, "~> 0.1", git: "https://github.com/elixir-lang/foobar.git" }
   defp deps do
     [ { :ex_doc, github: "elixir-lang/ex_doc" } ]
+  end
+
+  defp deps_test do
+    []
   end
 end
