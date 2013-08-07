@@ -41,7 +41,7 @@ end
 
 ## API documentation
 
-You can find the API documentation on it's (own page)[http://maxsz.github.io/ElixirVerbalExpressions/docs/index.html].
+You can find the API documentation on it's [own page](http://maxsz.github.io/ElixirVerbalExpressions/docs/index.html).
 
 ## Contributions
 Pull requests are welcome.
