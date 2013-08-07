@@ -1,0 +1,11 @@
+language: erlang
+notifications:
+  recipients:
+    - github@maxsz.de
+otp_release:
+  - R16B
+before_install:
+  - git clone https://github.com/elixir-lang/elixir
+  - cd elixir && make && cd ..
+before_script: "export PATH=`pwd`/elixir/bin:$PATH"
+script: "cd verbal_expressions && MIX_ENV=test mix test"
