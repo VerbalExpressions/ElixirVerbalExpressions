@@ -38,34 +38,73 @@ defmodule VerbalExpressions do
   """
   defrecord VerEx, regex: "" do
 
+    def match?(string, record) do
+      Regex.match?(Regex.compile!(record.regex), string)
+    end
+
     def startOfLine(record) do
       record.update_regex fn _ -> "^" end
     end
 
     def endOfLine(record) do
-      record.update_regex fn old -> old <> "$" end
+      record.update_regex fn before -> before <> "$" end
     end
     
-    def then(s, record) do
-      record.update_regex fn old -> old <> Regex.escape(s) end
+    def then(string, record) do
+      record.update_regex fn before -> 
+        before <> "(?:" <> Regex.escape(string) <> ")"
+      end
     end
     
-    def match(s, record) do
-      Regex.match?(Regex.compile!(record.regex), s)
+    def find(string, record) do
+      then(string, record)
     end
+
+    def maybe(string, record) do
+      record.update_regex fn before ->
+        before <> "(?:" <> Regex.escape(string) <> ")?"
+      end
+    end
+
+    def anything(record) do
+      record.update_regex fn before -> before <> "(?:.*)" end
+    end
+
+    def anythingBut(string, record) do
+      record.update_regex fn before -> 
+        before <> "?:[^" <> Regex.escape(string) <> "]*)"
+      end
+    end
+
+    def something(record) do
+      record.update_regex fn before -> before <> "(?:.+)" end
+    end
+
+    def somethingBut(string, record) do
+      record.update_regex fn before ->
+        before <> "(?:[^" <> Regex.escape(string) <> "]+"
+      end
+    end
+
   end
 
   @doc """
-  This function matches a given string with a given regex string.
+  Match a given string with a given regex string.
   """
   def match?(regex, string) do
     Regex.match?(Regex.compile!(regex), string)
   end
 
+  @doc """
+  Express the start of a line regex anchor. This translates to '^'.
+  """
   def startOfLine() do
     "^"
   end
 
+  @doc """
+  Express the end of a line regex anchor. This translates to '$'.
+  """
   def endOfLine() do
     "$"
   end
@@ -75,12 +114,15 @@ defmodule VerbalExpressions do
   end
 
   @doc """
-  This function creates a regex string that will match the given string.
+  Express an exact string match.
 
   ## Examples
 
       iex> VE.then("x") |> VE.match?("x")
       true
+
+      iex> VE.then("hello") |> VE.match?("holla")
+      false
 
   """
   def then(string) do
@@ -92,8 +134,8 @@ defmodule VerbalExpressions do
   end
 
   @doc """
-  This is defined for API compatibility with the Javascript version. The Elixir
-  matching can be started with then/1, as well.
+  Defined for API compatibility with the Javascript version. The Elixir matching
+  can be started with then/1, as well.
   """
   def find(string) do
     then(string)
