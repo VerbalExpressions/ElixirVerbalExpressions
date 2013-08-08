@@ -3,8 +3,10 @@ defmodule VerbalExpressionsTest do
   alias VerbalExpressions, as: VE
   doctest VerbalExpressions
 
-  test "the truth" do
-    assert(true)
+  test "record" do
+    ve = VerEx.new
+    assert ve.startOfLine().then("xyz").match("xyz")
+    assert !ve.startOfLine().then("xyz").match("zyx")
   end
 
   test "concatenation" do
