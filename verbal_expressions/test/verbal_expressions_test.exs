@@ -5,8 +5,8 @@ defmodule VerbalExpressionsTest do
 
   test "record" do
     ve = VerEx.new
-    assert ve.startOfLine().then("xyz").match("xyz")
-    assert !ve.startOfLine().then("xyz").match("zyx")
+    assert ve.startOfLine().then("xyz").match?("xyz")
+    assert !ve.startOfLine().then("xyz").match?("zyx")
   end
 
   test "concatenation" do

@@ -17,76 +17,7 @@ defmodule VerbalExpressions do
       iex> |> VerbalExpressions.endOfLine()
       iex> |> VerbalExpressions.match?("test")
       true
-
-
-  ## Record syntax
-
-  Verbal Expressions can also be used with records, which add a syntax very much
-  like the Javascript original. Records allow you to chain function calls,
-  instead of using the |> operator. See the following examples to get the idea.
-
-  ### Examples
-
-      iex>v = VerEx.new
-      iex>v.startOfLine().then("hello").match("world")
-      false
-
   """
-
-  @doc """
-  Verbal Expressions as Records, to allow chaining of function calls.
-  """
-  defrecord VerEx, regex: "" do
-
-    def match?(string, record) do
-      Regex.match?(Regex.compile!(record.regex), string)
-    end
-
-    def startOfLine(record) do
-      record.update_regex fn _ -> "^" end
-    end
-
-    def endOfLine(record) do
-      record.update_regex fn before -> before <> "$" end
-    end
-    
-    def then(string, record) do
-      record.update_regex fn before -> 
-        before <> "(?:" <> Regex.escape(string) <> ")"
-      end
-    end
-    
-    def find(string, record) do
-      then(string, record)
-    end
-
-    def maybe(string, record) do
-      record.update_regex fn before ->
-        before <> "(?:" <> Regex.escape(string) <> ")?"
-      end
-    end
-
-    def anything(record) do
-      record.update_regex fn before -> before <> "(?:.*)" end
-    end
-
-    def anythingBut(string, record) do
-      record.update_regex fn before -> 
-        before <> "?:[^" <> Regex.escape(string) <> "]*)"
-      end
-    end
-
-    def something(record) do
-      record.update_regex fn before -> before <> "(?:.+)" end
-    end
-
-    def somethingBut(string, record) do
-      record.update_regex fn before ->
-        before <> "(?:[^" <> Regex.escape(string) <> "]+"
-      end
-    end
-
-  end
 
   @doc """
   Match a given string with a given regex string.
@@ -181,4 +112,68 @@ defmodule VerbalExpressions do
     before <> somethingBut(string)
   end
 
+end
+
+defrecord VerEx, regex: "" do
+  @docmodule """
+  Verbal Expressions as Records, to allow chaining of function calls.
+
+  Verbal Expressions can also be used with records, which add a syntax very much
+  like the Javascript original. Records allow you to chain function calls,
+  instead of using the |> operator. See the following examples to get the idea.
+
+  ### Examples
+
+      iex>v = VerEx.new
+      iex>v.startOfLine().then("hello").match?("world")
+      false
+
+  """
+  def match?(string, record) do
+    Regex.match?(Regex.compile!(record.regex), string)
+  end
+  
+  def startOfLine(record) do
+    record.update_regex fn _ -> "^" end
+  end
+  
+  def endOfLine(record) do
+    record.update_regex fn before -> before <> "$" end
+  end
+  
+  def then(string, record) do
+    record.update_regex fn before -> 
+      before <> "(?:" <> Regex.escape(string) <> ")"
+    end
+  end
+    
+  def find(string, record) do
+    then(string, record)
+  end
+
+  def maybe(string, record) do
+    record.update_regex fn before ->
+      before <> "(?:" <> Regex.escape(string) <> ")?"
+    end
+  end
+
+  def anything(record) do
+    record.update_regex fn before -> before <> "(?:.*)" end
+  end
+
+  def anythingBut(string, record) do
+    record.update_regex fn before -> 
+      before <> "?:[^" <> Regex.escape(string) <> "]*)"
+    end
+  end
+
+  def something(record) do
+    record.update_regex fn before -> before <> "(?:.+)" end
+  end
+
+  def somethingBut(string, record) do
+    record.update_regex fn before ->
+      before <> "(?:[^" <> Regex.escape(string) <> "]+"
+    end
+  end
 end
