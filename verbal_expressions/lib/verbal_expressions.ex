@@ -27,6 +27,19 @@ defmodule VerbalExpressions do
   end
 
   @doc """
+  Replace the occurences of regex in the given string with the given replacement
+  text.
+  
+  ## Examples
+      iex> VE.find("x") |> VE.replace("xyz", "")
+      "yz"
+ 
+  """
+  def replace(regex, string, replacement) do
+    Regex.compile!(regex) |> Regex.replace string, replacement
+  end
+
+  @doc """
   Express the start of a line regex anchor. This translates to '^'.
   """
   def startOfLine() do
@@ -111,7 +124,6 @@ defmodule VerbalExpressions do
   def somethingBut(before, string) do
     before <> somethingBut(string)
   end
-
 end
 
 defrecord VerEx, regex: "" do
@@ -131,6 +143,10 @@ defrecord VerEx, regex: "" do
   """
   def match?(string, record) do
     Regex.match?(Regex.compile!(record.regex), string)
+  end
+
+  def replace(string, replacement, record) do
+    Regex.compile!(record.regex) |> Regex.replace(string, replacement)
   end
   
   def startOfLine(record) do

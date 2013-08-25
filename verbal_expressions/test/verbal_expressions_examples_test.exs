@@ -20,12 +20,6 @@ defmodule VerbalExpressionsExamplesTest do
     testMe = "https://www.google.com"
     result = tester |> VerEx.match?(testMe)
 
-    if result do
-      IO.puts "Valid URL :)"
-    else
-      IO.puts "Invalid URL :("
-    end   
-
     assert result 
   end
 
@@ -39,16 +33,12 @@ defmodule VerbalExpressionsExamplesTest do
     # Execute the expression like a normal RegExp object
     result = expression |> VerEx.replace replaceMe, "duck"
 
-    IO.puts result # Outputs "Replace duck with a duck"
-
     assert result == "Replace duck with a duck"
   end
 
   test "replacing strings shorthand" do
     result = VerEx.find("red") |> VerEx.replace "We have a red house", "blue"
-             
-    IO.puts result # Outputs "We have a blue house"
-    
+
     assert result == "We have a blue house"
   end
 end
