@@ -7,8 +7,7 @@ Elixir Regular Expressions made easy. Ported from the JavaScript version [Verbal
 
 ## How to get started
 
-You cannot get started, yet. Step-by-step introductions will be presented here,
-once ready.
+Include the VerbalExpressions module (and alias it, if you want). Then simply check out the Examples and documentation to get started. It's easy :)
 
 ## Examples
 
@@ -18,18 +17,18 @@ Here's a couple of simple examples to give an idea of how VerbalExpressions work
 
 ```elixir
 # Create an example of how to test for correctly formed URLs
-alias VerbalExpressions, as: VE
-tester = VE.startOfLine()
-         |> VE.then("http")
-         |> VE.maybe("s")
-         |> VE.then("://")
-         |> VE.maybe("www")
-         |> VE.anythingBut(" ")
-         |> VE.endOfLine()
+alias VerbalExpressions, as: VerEx
+tester = VerEx.startOfLine()
+         |> VerEx.then("http")
+         |> VerEx.maybe("s")
+         |> VerEx.then("://")
+         |> VerEx.maybe("www")
+         |> VerEx.anythingBut(" ")
+         |> VerEx.endOfLine()
          
 testMe = "https://www.google.com"
 
-result = tester |> VE.match?(testMe)
+result = tester |> VerEx.match?(testMe)
 
 if result do
   IO.puts "Valid URL :)"
@@ -37,6 +36,29 @@ else
   IO.puts "Invalid URL :("
 end
 
+```
+
+### Replacing strings
+
+```elixir
+# Create a test string
+replaceMe = "Replace bird with a duck"
+
+# Create an expression that seeks for word "bird"
+expression = VerEx.find "bird"
+
+# Execute the expression like a normal RegExp object
+result = expression |> VerEx.replace replaceMe, "duck"
+
+IO.puts result # Outputs "Replace duck with a duck"
+```
+
+### Shorthand for string replace:
+
+```elixir
+result = VerEx.find("red") |> VerEx.replace "We have a red house", "blue"
+
+IO.puts result # Outputs "We have a blue house"
 ```
 
 ## API documentation
@@ -47,7 +69,7 @@ You can find the API documentation on it's [own page](http://maxsz.github.io/Eli
 Pull requests are welcome.
 
 ## Issues
- - Nothing's working, yet :)
+Please report any issues to the GitHub issuetracker.
 
 ## Thanks
 Thank you to @jehna for coming up with the awesome original idea!
