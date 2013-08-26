@@ -21,6 +21,11 @@ defmodule VerbalExpressions do
 
   @doc """
   Match a given string with a given regex string.
+
+  ## Examples
+      iex> VE.find("@") |> VE.match?("some@email.com")
+      true
+
   """
   def match?(regex, string) do
     Regex.match?(Regex.compile!(regex), string)
@@ -53,6 +58,7 @@ defmodule VerbalExpressions do
     "$"
   end
 
+  @doc "Concatenation version of endOfLine/0."
   def endOfLine(before) do
     before <> endOfLine()
   end
@@ -73,58 +79,126 @@ defmodule VerbalExpressions do
     "(?:" <> Regex.escape(string) <> ")"
   end
 
+  @doc "Concatenation version of then/1"
   def then(before, string) do
     before <> then(string)
   end
 
   @doc """
-  Defined for API compatibility with the Javascript version. The Elixir matching
-  can be started with then/1, as well.
+  See then/1. Defined for API compatibility with the Javascript version. The
+  Elixir matching can be started with then/1, as well.  
   """
   def find(string) do
     then(string)
   end
 
+  @doc """
+  Express an optional string match. This translates to (string)?.
+
+  ## Examples
+
+      iex> VE.find("12") |> VE.maybe("h") |> VE.maybe("m") |> VE.match?("12h")
+      true
+
+  """
   def maybe(string) do
     "(?:" <> Regex.escape(string) <> ")?"
   end
 
+  @doc "Concatenation version of maybe/1"
   def maybe(before, string) do
     before <> maybe(string)
   end
 
+  @doc """
+  Match any number of any characters. Translates to '.*'.
+
+  ## Examples
+  
+      iex> VE.anything() |> VE.then("hours") |> VE.match?("12 hours")
+      true
+
+      iex> VE.anything() |> VE.then("hours") |> VE.match?("24 hours")
+      true
+
+      iex> VE.anything() |> VE.then("hours") |> VE.match?("10 minutes")
+      false
+
+  """
   def anything() do
     "(?:.*)"
   end
 
+
+  @doc "Concatenation version of anything/0"
   def anything(before) do
     before <> anything()
   end
 
+  @doc """
+  Match anything but the given string. Translates to "[^string]*".
+
+  ## Examples
+
+      iex> VE.anythingBut("www.google.com") |> VE.match?("www.elixir-lang.org")
+      true
+
+      iex> VE.find("W") |> VE.anythingBut("O") |> VE.then("W") |> VE.match?("WOW")
+      false
+  """
   def anythingBut(string) do
     "(?:[^" <> Regex.escape(string) <> "]*)"
   end
 
+  @doc "Concatenation version of anythingBut/1"
   def anythingBut(before, string) do
     before <> anythingBut(string)
   end
 
+  @doc """
+  Match any string but the empty one. Translates to ".+".
+
+  ## Examples
+
+      iex> VE.something() |> VE.match?("")
+      false
+
+      iex> VE.something() |> VE.match?("foo")
+      true
+
+  """
   def something() do
     "(?:.+)"
   end
 
+  @doc "Concatenation version of something/0"
   def something(before) do
     before <> something()
   end
 
+  @doc """
+  Match anything except the given string and the empty string. Translates to
+  "[^string]+".
+
+  ## Examples
+ 
+      iex> VE.somethingBut("www.") |> VE.match?("ftp.google.com")
+      true
+
+      iex> VE.startOfLine() |> VE.somethingBut("www.") |> VE.match?("www.google.com")
+      false
+
+  """
   def somethingBut(string) do
-    "(?:[^" <> Regex.escape(string) <> "]+"
+    "(?:[^" <> Regex.escape(string) <> "]+)"
   end
 
+  @doc "Concatenation version of somethingBut/1"
   def somethingBut(before, string) do
     before <> somethingBut(string)
   end
 end
+
 
 defrecord VerEx, regex: "" do
   @docmodule """
@@ -141,6 +215,7 @@ defrecord VerEx, regex: "" do
       false
 
   """
+
   def match?(string, record) do
     Regex.match?(Regex.compile!(record.regex), string)
   end
