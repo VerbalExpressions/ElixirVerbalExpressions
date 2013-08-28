@@ -54,13 +54,8 @@ defmodule VerbalExpressions do
   @doc """
   Express the end of a line regex anchor. This translates to '$'.
   """
-  def endOfLine() do
-    "$"
-  end
-
-  @doc "Concatenation version of endOfLine/0."
-  def endOfLine(before) do
-    before <> endOfLine()
+  def endOfLine(before // "") do
+    before <> "$"
   end
 
   @doc """
@@ -75,21 +70,16 @@ defmodule VerbalExpressions do
       false
 
   """
-  def then(string) do
-    "(?:" <> Regex.escape(string) <> ")"
-  end
-
-  @doc "Concatenation version of then/1"
-  def then(before, string) do
-    before <> then(string)
+  def then(before // "", string) do
+    before <> "(?:" <> Regex.escape(string) <> ")"
   end
 
   @doc """
   See then/1. Defined for API compatibility with the Javascript version. The
   Elixir matching can be started with then/1, as well.  
   """
-  def find(string) do
-    then(string)
+  def find(before // "", string) do
+    then(before, string)
   end
 
   @doc """
@@ -101,13 +91,8 @@ defmodule VerbalExpressions do
       true
 
   """
-  def maybe(string) do
-    "(?:" <> Regex.escape(string) <> ")?"
-  end
-
-  @doc "Concatenation version of maybe/1"
-  def maybe(before, string) do
-    before <> maybe(string)
+  def maybe(before // "", string) do
+    before <> "(?:" <> Regex.escape(string) <> ")?"
   end
 
   @doc """
@@ -125,14 +110,8 @@ defmodule VerbalExpressions do
       false
 
   """
-  def anything() do
-    "(?:.*)"
-  end
-
-
-  @doc "Concatenation version of anything/0"
-  def anything(before) do
-    before <> anything()
+  def anything(before // "") do
+    before <> "(?:.*)"
   end
 
   @doc """
@@ -146,13 +125,8 @@ defmodule VerbalExpressions do
       iex> VE.find("W") |> VE.anythingBut("O") |> VE.then("W") |> VE.match?("WOW")
       false
   """
-  def anythingBut(string) do
-    "(?:[^" <> Regex.escape(string) <> "]*)"
-  end
-
-  @doc "Concatenation version of anythingBut/1"
-  def anythingBut(before, string) do
-    before <> anythingBut(string)
+  def anythingBut(before // "", string) do
+    before <> "(?:[^" <> Regex.escape(string) <> "]*)"
   end
 
   @doc """
@@ -167,13 +141,8 @@ defmodule VerbalExpressions do
       true
 
   """
-  def something() do
-    "(?:.+)"
-  end
-
-  @doc "Concatenation version of something/0"
-  def something(before) do
-    before <> something()
+  def something(before // "") do
+    before <> "(?:.+)"
   end
 
   @doc """
@@ -189,13 +158,61 @@ defmodule VerbalExpressions do
       false
 
   """
-  def somethingBut(string) do
-    "(?:[^" <> Regex.escape(string) <> "]+)"
+  def somethingBut(before // "", string) do
+    before <> "(?:[^" <> Regex.escape(string) <> "]+)"
   end
 
-  @doc "Concatenation version of somethingBut/1"
-  def somethingBut(before, string) do
-    before <> somethingBut(string)
+  @doc """
+  Matches any line break.
+
+  ## Examples
+      iex> VE.lineBreak() |> VE.match?("Hi")
+      false
+
+      iex> VE.find("Hi") |> VE.lineBreak() |> VE.match?("Hi\\n")
+      true
+  """
+  def lineBreak(before // "") do
+    before <> "(?:(?:\n)|(?:\r\n))"
+  end
+
+  @doc "Alias for linebreak/1"
+  def br(before // "") do
+    lineBreak(before)
+  end
+
+  @doc "Match the <tab> character."
+  def tab(before // "") do
+    before <> "\t"
+  end
+
+  @doc "Match at least one word"
+  def word(before // "") do
+    before <> "\w+"
+  end
+
+  @doc """
+  Match any character in the given string.
+
+  ## Examples
+
+      iex> VE.anyOf("abcd") |> VE.match?("e")
+      false
+
+      iex> VE.anyOf("abcd") |> VE.match?("a")
+      true
+  """
+  def anyOf(before // "", string) do
+    before <> "(?:[" <> string <> "])"
+  end
+
+  @doc "Alias for anyOf/2"
+  def any(before // "", string) do
+    anyOf(before, string)
+  end
+
+  def range(_before // "", _string) do
+    raise "Not yet implemented"
   end
 end
 

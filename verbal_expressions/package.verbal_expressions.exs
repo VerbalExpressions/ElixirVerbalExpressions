@@ -3,4 +3,4 @@ Expm.Package.new(name: "verbal_expressions",
                  version: "0.1", 
                  keywords: ["Elixir","Regex","Regular Expressions"],
                  maintainers: [[name: "Maximilian Szengel", email: "maximilian.szengel@gmail.com"]],
-                 repositories: [[github: "maxsz/ElixirVerbalExpressions", tag: "0.1"]])
+                 repositories: [[github: "maxsz/ElixirVerbalExpressions", tag: "v1.1"]])
