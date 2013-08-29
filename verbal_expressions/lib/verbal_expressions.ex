@@ -284,4 +284,40 @@ defrecord VerEx, regex: "" do
       before <> "(?:[^" <> Regex.escape(string) <> "]+"
     end
   end
+
+  def lineBreak(record) do
+    record.update_regex fn before ->
+      before <> "(?:(?:\n)|(?:\r\n))"
+    end
+  end
+
+  def br(record) do
+    lineBreak(record)
+  end
+
+  def tab(record) do
+    record.update_regex fn before ->
+      before <> "\t"
+    end
+  end
+
+  def word(record) do
+    record.update_regex fn before ->
+      before <> "\w+"
+    end
+  end
+
+  def anyOf(string, record) do
+    record.update_regex fn before ->
+      before <> "(?:[" <> string <> "])"
+    end
+  end
+
+  def any(string, record) do
+    anyOf(string, record)
+  end
+
+  def range(_string, _record) do
+    raise "Not yet implemented"
+  end
 end
