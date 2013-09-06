@@ -41,4 +41,11 @@ defmodule VerbalExpressionsExamplesTest do
 
     assert result == "We have a blue house"
   end
+
+  test "replacing strings shorthand chaining" do
+    v = VerbalExpressionRecord.new
+    result = v.find("red").replace("We have a red house", "blue")
+
+    assert result == "We have a blue house"
+  end
 end

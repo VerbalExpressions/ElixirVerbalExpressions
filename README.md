@@ -61,6 +61,21 @@ result = VerEx.find("red") |> VerEx.replace "We have a red house", "blue"
 IO.puts result # Outputs "We have a blue house"
 ```
 
+### Method chaining
+
+The original version of VerbalExpressions uses method chaining. This version of
+verbal expressions in Elixir does not only support the (nicer) `|>`-based
+chaining, but also has a record-based version for method-chaining support.
+
+Here is the above string replace example using method chaining:
+
+```elixir
+v = VerbalExpressionRecord.new
+result = v.find("red").replace("We have a red house", "blue")
+
+IO.puts result # Outputs "We have a blue house"
+```
+
 ## API documentation
 
 You can find the API documentation on it's [own page](http://maxsz.github.io/ElixirVerbalExpressions/docs/index.html).

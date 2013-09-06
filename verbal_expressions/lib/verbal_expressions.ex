@@ -217,7 +217,7 @@ defmodule VerbalExpressions do
 end
 
 
-defrecord VerEx, regex: "" do
+defrecord VerbalExpressionRecord, regex: "" do
   @docmodule """
   Verbal Expressions as Records, to allow chaining of function calls.
 
@@ -227,7 +227,7 @@ defrecord VerEx, regex: "" do
 
   ### Examples
 
-      iex>v = VerEx.new
+      iex>v = VerbalExpressionRecord.new
       iex>v.startOfLine().then("hello").match?("world")
       false
 
