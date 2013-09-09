@@ -4,11 +4,11 @@ defmodule VerbalExpressionsTest do
   doctest VerbalExpressions
 
   test "record" do
-    ve = VerEx.new
+    v = VerbalExpressionRecord.new
 
-    assert ve.startOfLine().then("xyz").match?("xyz")
-    assert !ve.startOfLine().then("xyz").match?("zyx")
-    assert ve.find(".").replace("Hello World.", "!") == "Hello World!"
+    assert v.startOfLine().then("xyz").match?("xyz")
+    assert !v.startOfLine().then("xyz").match?("zyx")
+    assert v.find(".").replace("Hello World.", "!") == "Hello World!"
   end
 
   test "concatenation" do
