@@ -3,7 +3,7 @@ defmodule VerbalExpressions.Mixfile do
 
   def project do
     [ app: :verbal_expressions,
-      version: "0.1",
+      version: "0.2",
       name: "ElixirVerbalExpressions",
       source_url: "https://github.com/maxsz/ElixirVerbalExpressions",
       elixir: "~> 0.10.1",
@@ -16,8 +16,6 @@ defmodule VerbalExpressions.Mixfile do
     []
   end
 
-  # Returns the list of dependencies in the format:
-  # { :foobar, "~> 0.1", git: "https://github.com/elixir-lang/foobar.git" }
   defp deps do
     [ { :ex_doc, github: "elixir-lang/ex_doc" } ]
   end
